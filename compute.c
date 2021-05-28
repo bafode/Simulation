@@ -4,11 +4,12 @@ int global_baslangic_stok;
 uint8_t tedarik=0;
 uint8_t state=1;
 uint8_t counter=0;
-//------------------------------//
+/*
+   This array will content the sum of the total cost of each table*/ 
 double final_array_contenair[MAX_REORDER_POINT*MAX_ORDER]={};
-//double twoD_Array[MAX_YENIDEN_SIPARIS_NOKTASI][MAX_YENIDEN_SIPARIS_NOKTASI];
-int array_index=0;
-float minExpense=0;
+
+int array_index=0; //is the index of final_array_contenair .Ww'll increment this index index after
+float minExpense=0;// is
 //-----------------------------//
 
 struct table* cons_table(){
@@ -47,10 +48,10 @@ void newRow(struct table** headRow,const int reorder_point,const int order_quant
 		newTable->position_of_stock=(newTable->items_in_stock+newTable->open_order);
 		global_baslangic_stok=newTable->items_in_stock;
 
-		Lose(newTable);
-		OrderNew(newTable,reorder_point,order_quantity);
+		Lose(newTable);//Verify if there areb lost or not
+		OrderNew(newTable,reorder_point,order_quantity); //Verify if we to make new order or not
 
-		newTable->total_cost=(newTable->items_in_stok_value+newTable->lost_cost+newTable->order_cost);
+		newTable->total_cost=(newTable->items_in_stok_value+newTable->lost_cost+newTable->order_cost); //
 
 			*headRow=newTable;
 
@@ -136,11 +137,26 @@ int RandomNum(int lower,int upper){
 
 
 }
+/*
+ST:Simualtion Time
+IS:Initial stok
+OD: Oder
+IT:Stok Item
+LO:Lose
+PS:Position of Stok
+RO:Reorder
+ST:Supply Time
+SIC:Stock Item Cost
+OC: Order Cost
+LC:lost Cost
+OC:Order Cost
+TC: Total Cost
+*/
 
 void tablePrint(struct table* table){
 	struct table* i=table;
-	printf("Table for Siparis:%d && Yeniden:%d\n",i->order_quantity,i->reorder_point);
-	printf("BZ---|--BS--|--TE--|----EK--|--KP--|----SP--|----AS--|--TS--|----EBM--|---KM--|--SM---|---TM--|\n");
+	printf("Order :%d  $$$$$ ReorderPoint :%d\n",i->order_quantity,i->reorder_point);
+	printf("ST---|--IS--|--OD--|----SI--|--LO--|----PS--|----RO--|--ST--|----SIC--|---LC--|--OC---|---TC--|\n");
 	while(i !=NULL){
 		printf("%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%.02f\t%.02f\t%.02f\t%.02f\n",i->simulation_time,i->initial_stock,i->demand,i->items_in_stock,i->lost,i->position_of_stock,i->open_order,i->supply_time,i->items_in_stok_value,i->lost_cost,i->order_cost,i->total_cost);
 		final_array_contenair[array_index]=final_array_contenair[array_index]+ i->total_cost;
@@ -168,7 +184,7 @@ void MinExpense(double *array){
 void FTable(int siparis[],int yeniden[]){
     int optimumQ,optimumR;
 	MinExpense(final_array_contenair);
-    printf("R   | Q");
+    printf("R   | Q");  //R is for reoder and Q for reoder point
 	for(int i=0;i<MAX_ORDER;i++){
 		printf("\t   %d  ",siparis[i]);
 	}
